@@ -49,7 +49,7 @@ main { flex: 1; min-width: 0; padding: 16px 0 60px 16px; max-width: 900px; }
 .row:hover { background: var(--hover); }
 .row.sel { background: var(--sel); }
 .row input { margin: 0; width: 16px; height: 16px; flex: none; accent-color: var(--accent); cursor: pointer; }
-.time { width: 40px; flex: none; color: var(--muted); font-size: 12px; }
+.time { width: 66px; flex: none; white-space: nowrap; color: var(--muted); font-size: 12px; }
 .fav { width: 16px; height: 16px; flex: none; }
 .title { color: var(--fg); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 0 1 auto; }
 .title:hover { text-decoration: underline; }

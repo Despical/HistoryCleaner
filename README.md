@@ -17,6 +17,13 @@
 
 <p align="center"><a href="#installation">Installation</a> · <a href="#usage">Usage</a> · <a href="#how-it-works">How it works</a></p>
 
+<p align="center">
+  <img src="assets/screenshots/history.png" alt="History Cleaner history page" width="49%">
+  <img src="assets/screenshots/selection.png" alt="History Cleaner selection bar with 3 entries selected" width="49%">
+</p>
+
+<p align="center"><sub>Screenshots use sample data, not real browsing history.</sub></p>
+
 ---
 
 ## The problem
