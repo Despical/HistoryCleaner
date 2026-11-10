@@ -40,5 +40,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          sed "s/{{tag}}/${GITHUB_REF_NAME}/g" .github/release-template.md > release-notes.md
           gh release create "${GITHUB_REF_NAME}" "history-cleaner-${GITHUB_REF_NAME}.zip" \
-            --title "History Cleaner ${GITHUB_REF_NAME}" --generate-notes
+            --title "History Cleaner ${GITHUB_REF_NAME}" \
+            --notes-file release-notes.md --generate-notes
