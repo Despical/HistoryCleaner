@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate and package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout History Cleaner
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Validate extension
+        run: node scripts/validate.mjs
+
+      - name: Package extension
+        run: |
+          cd src
+          zip -r ../history-cleaner.zip . -x '*.DS_Store'
+
+      - name: Upload extension package
+        uses: actions/upload-artifact@v6
+        with:
+          name: history-cleaner
+          path: history-cleaner.zip
+          if-no-files-found: error

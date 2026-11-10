@@ -1,0 +1,4 @@
+{
+  "extName": { "message": "History Cleaner" },
+  "extDescription": { "message": "A history page that deletes thousands of entries in small batches without freezing or failing. Search, select all and delete." }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "history-cleaner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome extension that deletes large selections of browsing history in small batches.",
+  "license": "GPL-3.0-or-later",
+  "author": "Despical",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Despical/HistoryCleaner.git"
+  },
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "icons": "node scripts/build-icons.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.0"
+  }
+}

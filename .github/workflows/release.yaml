@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publish release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout History Cleaner
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Validate extension
+        run: node scripts/validate.mjs
+
+      - name: Check tag matches manifest version
+        run: |
+          version=$(node -p "require('./src/manifest.json').version")
+          if [ "v$version" != "${GITHUB_REF_NAME}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match manifest version v$version" >&2
+            exit 1
+          fi
+
+      - name: Package extension
+        run: |
+          cd src
+          zip -r "../history-cleaner-${GITHUB_REF_NAME}.zip" . -x '*.DS_Store'
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" "history-cleaner-${GITHUB_REF_NAME}.zip" \
+            --title "History Cleaner ${GITHUB_REF_NAME}" --generate-notes

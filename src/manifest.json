@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extName__",
+  "short_name": "History Cleaner",
+  "description": "__MSG_extDescription__",
+  "version": "1.0.0",
+  "default_locale": "en",
+  "author": "Despical",
+  "homepage_url": "https://github.com/Despical/HistoryCleaner",
+  "minimum_chrome_version": "110",
+  "permissions": ["history", "favicon"],
+  "chrome_url_overrides": {
+    "history": "history.html"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

@@ -1,0 +1,76 @@
+name: Bug Report
+description: "Found a glitch or unexpected behavior? Help us squash it by providing a detailed report."
+title: "[BUG] "
+labels: ["bug"]
+assignees:
+  - Despical
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report. Please provide as much detail as possible.
+        Report security issues privately to contact@despical.dev. Do not paste real browsing history or URLs.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this?
+      placeholder: |
+        1. Open the history page
+        2. Press Ctrl+A and Delete
+        3. See error ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Extension version
+      description: Shown on chrome://extensions.
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Google Chrome
+        - Microsoft Edge
+        - Brave
+        - Opera
+        - Other Chromium browser
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser version, operating system and roughly how many history entries you have.
+      placeholder: |
+        Browser version:
+        Operating system:
+        Approximate number of history entries:
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console output
+      description: Open DevTools on the history page and paste any errors. Remove personal URLs first.
+      render: log
+  - type: checkboxes
+    id: validation
+    attributes:
+      label: Validation
+      description: Check these before submitting.
+      options:
+        - label: I have checked for existing issues regarding this bug.
+          required: true
