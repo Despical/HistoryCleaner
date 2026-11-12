@@ -1,6 +1,6 @@
 {
   "name": "history-cleaner",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "Chrome extension that deletes large selections of browsing history in small batches.",
   "license": "GPL-3.0-or-later",

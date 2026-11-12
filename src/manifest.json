@@ -3,7 +3,7 @@
   "name": "__MSG_extName__",
   "short_name": "History Cleaner",
   "description": "__MSG_extDescription__",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "default_locale": "en",
   "author": "Despical",
   "homepage_url": "https://github.com/Despical/HistoryCleaner",
