@@ -11,6 +11,8 @@ let lastDay = '';
 let curCard = null;
 let cancelled = false;
 let menuUrl = null;
+let wipeAsked = false;
+let bookmarked = new Set();
 
 const nf = (n) => n.toLocaleString(locale());
 const dayKey = (t) => new Date(t).toDateString();
@@ -25,9 +27,28 @@ function dayLabel(ts) {
     return diff === 0 ? `${t('today')} - ${full}` : diff === 1 ? `${t('yesterday')} - ${full}` : full;
 }
 
+async function loadBookmarks() {
+    const urls = new Set();
+    const walk = (nodes) => nodes.forEach((n) => { if (n.url) urls.add(n.url); if (n.children) walk(n.children); });
+
+    try { walk(await chrome.bookmarks.getTree()); } catch { }
+
+    bookmarked = urls;
+}
+
+async function removeBookmark(url) {
+    const nodes = await chrome.bookmarks.search({ url });
+    await Promise.all(nodes.map((n) => chrome.bookmarks.remove(n.id).catch(() => {})));
+
+    bookmarked.delete(url);
+}
+
 async function load() {
     const text = $('#q').value.trim();
-    items = await chrome.history.search({ text, startTime: 0, maxResults: 1000000 });
+    [items] = await Promise.all([
+        chrome.history.search({ text, startTime: 0, maxResults: 1000000 }),
+        loadBookmarks(),
+    ]);
 
     selected.clear();
 
@@ -83,7 +104,16 @@ function renderMore() {
         more.className = 'more'; more.type = 'button'; more.title = t('more');
         more.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm0 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>';
 
-        row.append(cb, time, fav, a, host, more);
+        row.append(cb, time, fav, a, host);
+
+        if (bookmarked.has(it.url)) {
+            const star = document.createElement('button');
+            star.className = 'star'; star.type = 'button'; star.title = t('removeBookmark');
+            star.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+            row.appendChild(star);
+        }
+
+        row.appendChild(more);
         curCard.appendChild(row);
     }
     list.appendChild(frag);
@@ -101,6 +131,21 @@ list.addEventListener('click', (e) => {
 
     if (!row) return;
     const i = +row.dataset.i;
+
+    const star = e.target.closest('.star');
+
+    if (star) {
+        e.stopPropagation();
+
+        const url = items[i].url;
+
+        removeBookmark(url).then(() => {
+            list.querySelectorAll('.row').forEach((r) => {
+                if (items[+r.dataset.i]?.url === url) r.querySelector('.star')?.remove();
+            });
+        });
+        return;
+    }
 
     const more = e.target.closest('.more');
 
@@ -180,7 +225,10 @@ document.addEventListener('keydown', (e) => {
 
 function askDelete() {
     if (!selected.size) return;
-    $('#confirmText').textContent = t('confirmText', { n: nf(selected.size) });
+    wipeAsked = false;
+    $('#confirmText').textContent = isEverything([...selected])
+        ? t('confirmAllText')
+        : t('confirmText', { n: nf(selected.size) });
     $('#confirmDlg').showModal();
 }
 
@@ -197,11 +245,34 @@ document.addEventListener('keydown', (e) => {
 $('#confirmNo').addEventListener('click', () => $('#confirmDlg').close());
 $('#confirmYes').addEventListener('click', () => {
     $('#confirmDlg').close();
-    deleteUrls([...selected]);
+
+    if (wipeAsked) wipeAll();
+    else deleteUrls([...selected]);
 });
+
+// Works even when the list is empty: leftovers the list cannot show still get cleared.
+$('#wipeAll').addEventListener('click', (e) => {
+    e.preventDefault();
+
+    wipeAsked = true;
+    $('#confirmText').textContent = t('confirmAllText');
+    $('#confirmDlg').showModal();
+});
+
+const isEverything = (urls) => urls.length > 0 && urls.length === items.length && !$('#q').value.trim();
+
+// deleteUrl only removes the listed history rows; the address bar's learned
+// shortcuts and predictions survive it, so a full wipe clears them together.
+async function wipeAll() {
+    await chrome.browsingData.remove({ since: 0 }, { history: true });
+    await chrome.history.deleteAll();
+
+    await load();
+}
 
 async function deleteUrls(urls) {
     if (!urls.length) return;
+    if (isEverything(urls)) return wipeAll();
     cancelled = false;
     const showProgress = urls.length > BATCH;
     if (showProgress) {

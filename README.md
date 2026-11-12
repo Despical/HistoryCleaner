@@ -38,6 +38,8 @@ History Cleaner replaces that page with one that sends the deletions in small as
 - Progress dialog with a **Stop** button.
 - `Ctrl+A` selects every entry in the result list, not just the rendered rows. Shift-click selects a range.
 - `Delete` opens the confirmation dialog whenever something is selected.
+- **Delete all history** wipes the whole history together with the address bar suggestions learned from it.
+- Bookmarked entries show a star; clicking it removes the bookmark.
 - Search narrows the list first, so "select all" can remove one site, one topic or everything.
 - Layout modeled on Chrome's own history page: day cards, a selection bar, a row menu and the confirmation dialog.
 - Follows the browser's light and dark theme.
@@ -73,7 +75,7 @@ Deleting an entry removes every visit of that address, the same as Chrome's own 
 
 The extension overrides the `history` page through `chrome_url_overrides`. It loads results with `chrome.history.search`, keeps the selection in memory and removes entries with `chrome.history.deleteUrl`, fifty at a time. Rows are rendered 300 at a time while you scroll, so large histories stay responsive.
 
-Permissions: `history` to read and delete entries and `favicon` to show site icons. Nothing else is requested.
+Permissions: `history` to read and delete entries, `favicon` to show site icons, `browsingData` for **Delete all history** and `bookmarks` to show and remove bookmark stars. Nothing else is requested.
 
 ## Languages
 

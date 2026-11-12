@@ -8,7 +8,7 @@
   "author": "Despical",
   "homepage_url": "https://github.com/Despical/HistoryCleaner",
   "minimum_chrome_version": "110",
-  "permissions": ["history", "favicon"],
+  "permissions": ["history", "favicon", "browsingData", "bookmarks"],
   "chrome_url_overrides": {
     "history": "history.html"
   },
