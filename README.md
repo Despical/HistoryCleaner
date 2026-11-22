@@ -38,7 +38,7 @@ History Cleaner replaces that page with one that sends the deletions in small as
 - Progress dialog with a **Stop** button.
 - `Ctrl+A` selects every entry in the result list, not just the rendered rows. Shift-click selects a range.
 - `Delete` opens the confirmation dialog whenever something is selected.
-- **Delete all history** wipes the whole history together with the address bar suggestions learned from it.
+- **Delete all history** wipes the whole history together with the address bar suggestions learned from it. Shift-click it to skip the confirmation dialog.
 - Bookmarked entries show a star; clicking it removes the bookmark.
 - Search narrows the list first, so "select all" can remove one site, one topic or everything.
 - Layout modeled on Chrome's own history page: day cards, a selection bar, a row menu and the confirmation dialog.

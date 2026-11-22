@@ -254,6 +254,9 @@ $('#confirmYes').addEventListener('click', () => {
 $('#wipeAll').addEventListener('click', (e) => {
     e.preventDefault();
 
+    // Shift+click skips the confirmation dialog.
+    if (e.shiftKey) return wipeAll();
+
     wipeAsked = true;
     $('#confirmText').textContent = t('confirmAllText');
     $('#confirmDlg').showModal();
